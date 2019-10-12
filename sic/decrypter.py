@@ -17,7 +17,10 @@
 # or write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 import struct
-import StringIO
+try:
+    from StringIO import StringIO ## for Python 2
+except ImportError:
+    from io import BytesIO ## for Python 3
 import zlib
 
 from Crypto.Cipher import AES
@@ -63,7 +66,10 @@ class Decrypter:
         salt2  = self.__read_bytearray()
         block  = self.__read_bytearray()
         decr   = cipher.decrypt(block)
-        sub_fd = StringIO.StringIO(decr)
+        try:
+            sub_fd = BytesIO(decr)
+        except NameError:
+            sub_fd = StringIO(decr)
         iv2    = self.__read_bytearray( sub_fd )
         pass2  = self.__read_bytearray( sub_fd )
         check  = self.__read_bytearray( sub_fd )

@@ -18,3 +18,5 @@ Dump a SIC database to its original XML format:
 ## Copyright
 
 This software is copyright of [Simone 'evilsocket' Margaritelli](http://www.evilsocket.net) and licensed under GPL3.
+
+The SafeInCloud.db file resides on the following location: https://safeincloud.uservoice.com/knowledgebase/articles/424490-where-is-the-cloud-database-located

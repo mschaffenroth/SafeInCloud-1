@@ -26,6 +26,10 @@ from termcolor import colored
 from xml.dom.minidom import parseString
 from sic.decrypter import Decrypter
 from sic.entry import Entry
+try:
+    input = raw_input
+except NameError:
+    pass
 
 def matches( query, card ):
     try:
@@ -56,9 +60,9 @@ config_file = os.path.join( expanduser("~"), '.sic' )
 if not os.path.isfile(config_file):
     ok = False
     while ok is False:
-        db_path = raw_input( "Configuration file not found, please enter the path of your SiC database: " )
+        db_path = input( "Configuration file not found, please enter the path of your SiC database: " )
         if not os.path.isfile(db_path):
-            print "%s does not exist!" % db_path
+            print( "%s does not exist!" % db_path)
         else:
             ok = True
 
@@ -86,14 +90,19 @@ for node in xml.getElementsByTagName('card'):
 for entry in entries:
     if entry.matches(search):
         notes = None
-        print colored( "%s\n" % entry.title, 'green', attrs=['bold'] )
-        for title, field in entry.fields.iteritems():
+        print( colored( "%s\n" % entry.title, 'green', attrs=['bold'] ))
+        try:
+            entry_items = entry.fields.iteritems()
+        except AttributeError:
+            entry_items = entry.fields.items()
+
+        for title, field in entry_items:
             if field.type == 'notes':
                 notes = field
             else:
-                print "%-25s: %s" % ( colored( title, 'grey', attrs=['bold'] ), field.value )
+                print( "%-25s: %s" % ( colored( title, 'grey', attrs=['bold'] ), field.value ))
 
         if notes is not None:
-            print "%-25s:\n\n%s" % ( colored( 'Notes', 'grey', attrs=['bold'] ), notes.value )
+            print( "%-25s:\n\n%s" % ( colored( 'Notes', 'grey', attrs=['bold'] ), notes.value ))
 
         print
